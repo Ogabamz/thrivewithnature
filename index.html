@@ -482,7 +482,7 @@
         !function (f, b, e, v, n, t, s) {
             if (f.fbq) return; n = f.fbq = function () {
                 n.callMethod ?
-                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
             };
             if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
             n.queue = []; t = b.createElement(e); t.async = !0;
@@ -666,12 +666,14 @@
                     <span>Via trusted partners like GIG or Kwik – Ships in 2–3 days</span>
                 </div>
                 <p style="text-align: center; margin-top: 20px; font-size: 1.2em; color: var(--text-dark);">
-                    <strong>Total Stacked Value: ₦163,000</strong></p>
+                    <strong>Total Stacked Value: ₦163,000</strong>
+                </p>
                 <p style="text-align: center; font-size: 1.1em; color: var(--text-light);"><strong>You Pay Just
                         ₦136,000</strong></p>
             </div>
 
-            <form id="order-whatsapp-form" style="max-width:430px;margin:25px auto 30px auto;text-align:left">
+            <form id="order-whatsapp-form" action="https://formspree.io/f/mvzbllbo" method="POST"
+                style="max-width:430px;margin:25px auto 30px auto;text-align:left">
                 <label style="font-weight:600;display:block;margin-bottom:7px;">Full Name</label>
                 <input type="text" name="name" required
                     style="width:100%;padding:11px;border-radius:7px;border:1.5px solid #e3e3e3;margin-bottom:18px;font-size:1em;">
@@ -687,13 +689,24 @@
             <script>
                 document.getElementById('order-whatsapp-form').onsubmit = function (e) {
                     e.preventDefault();
-                    var name = this.name.value.trim();
-                    var email = this.email.value.trim();
-                    var location = this.location.value.trim();
-                    var msg =
-                        'I want to buy the BP Support Pack. Name: ' + name + ', Email: ' + email + ', Location: ' + location;
-                    var url =
-                        'https://wa.me/2348139278909?text=' + encodeURIComponent(msg);
+
+                    var form = this;
+                    var name = form.name.value.trim();
+                    var email = form.email.value.trim();
+                    var location = form.location.value.trim();
+
+                    // Send to Formspree in the background
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    // Redirect to WhatsApp
+                    var msg = 'I want to buy the BP Support Pack. Name: ' + name + ', Email: ' + email + ', Location: ' + location;
+                    var url = 'https://wa.me/2348139278909?text=' + encodeURIComponent(msg);
                     window.open(url, '_blank');
                 };
             </script>
